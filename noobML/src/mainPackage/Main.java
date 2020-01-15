@@ -1,6 +1,7 @@
 package mainPackage;
 
 import package123.FolderToFiles;
+import package123.ImageProcessor;
 import package123.RGB;
 
 import java.io.File;
@@ -47,8 +48,10 @@ public class Main
                     }
                 }
             }
-            //RGB rgb = new RGB("/home/yasinsazid/Desktop/ibtd/"+real.getName());
-            //RGB rgb1 = new RGB("/home/yasinsazid/Desktop/ibtd/"+mask.getName());
+            RGB rgb = new RGB("/home/yasinsazid/Desktop/ibtd/"+real.getName(),
+                    "/home/yasinsazid/Desktop/ibtd/"+mask.getName());
+            ImageProcessor imageProcessor = new ImageProcessor(rgb.getSkin(),rgb.getNonSkin());
+
             doneFiles.add(real);
             doneFiles.add(mask);
             System.out.println(real.getName());

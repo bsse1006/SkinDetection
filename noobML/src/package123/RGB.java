@@ -8,21 +8,19 @@ import javax.imageio.ImageIO;
 
 public class RGB extends Component {
 
-    private File[] listOfFiles = null;
     private int r;
     private int b;
     private int g;
 
-    public int getR() {
-        return r;
+    private int [] [] [] skin = new int [256] [256] [256];
+    private int [] [] [] nonSkin = new int [256] [256] [256];
+
+    public int[][][] getSkin() {
+        return skin;
     }
 
-    public int getB() {
-        return b;
-    }
-
-    public int getG() {
-        return g;
+    public int[][][] getNonSkin() {
+        return nonSkin;
     }
 
     public void printPixelARGB(int pixel) {
@@ -36,24 +34,35 @@ public class RGB extends Component {
         //System.out.println(r+g+b);
     }
 
-    private void marchThroughImage(BufferedImage image) {
-        int w = image.getWidth();
-        int h = image.getHeight();
+    private void marchThroughImage(BufferedImage realImage, BufferedImage maskImage) {
+        int w = realImage.getWidth();
+        int h = realImage.getHeight();
 
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
-                int pixel = image.getRGB(j, i);
-                printPixelARGB(pixel);
+                int pixel = maskImage.getRGB(j, i);
+                int realPixel = realImage.getRGB(j, i);
+                if(pixel == -1)
+                {
+                    printPixelARGB(realPixel);
+                    nonSkin[r][g][b]++;
+                }
+                else
+                {
+                    printPixelARGB(realPixel);
+                    skin[r][g][b]++;
+                }
             }
         }
     }
 
-    public RGB(String filePath) {
+    public RGB(String real, String mask) {
         try {
             // get the BufferedImage, using the ImageIO class
-            BufferedImage image;
-            image = ImageIO.read(new File(filePath));
-            marchThroughImage(image);
+            BufferedImage realImage, maskImage;
+            realImage = ImageIO.read(new File(real));
+            maskImage = ImageIO.read(new File(mask));
+            marchThroughImage(realImage, maskImage);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
