@@ -6,20 +6,21 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class RGB extends Component {
+public class RGB extends Component
+{
 
     private int r;
     private int b;
     private int g;
 
-    private int [] [] [] skin = new int [256] [256] [256];
-    private int [] [] [] nonSkin = new int [256] [256] [256];
+    private double [] [] [] skin = new double [256] [256] [256];
+    private double [] [] [] nonSkin = new double [256] [256] [256];
 
-    public int[][][] getSkin() {
+    public double[][][] getSkin() {
         return skin;
     }
 
-    public int[][][] getNonSkin() {
+    public double[][][] getNonSkin() {
         return nonSkin;
     }
 

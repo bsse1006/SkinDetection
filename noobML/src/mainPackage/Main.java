@@ -48,14 +48,14 @@ public class Main
                     }
                 }
             }
+
             RGB rgb = new RGB("/home/yasinsazid/Desktop/ibtd/"+real.getName(),
                     "/home/yasinsazid/Desktop/ibtd/"+mask.getName());
+
             ImageProcessor imageProcessor = new ImageProcessor(rgb.getSkin(),rgb.getNonSkin());
 
             doneFiles.add(real);
             doneFiles.add(mask);
-            System.out.println(real.getName());
-            System.out.println(mask.getName());
         }
     }
 }
