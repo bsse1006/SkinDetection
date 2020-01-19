@@ -27,8 +27,6 @@ public class ImageProcessor
             {
                 for(int k=0; k<256; k++)
                 {
-                    skin[i][j][k]=skin[i][j][k]+1;
-                    nonSkin[i][j][k]=nonSkin[i][j][k]+1;
                     skinSum=skinSum+skin[i][j][k];
                     nonSkinSum=nonSkinSum+nonSkin[i][j][k];
                 }
@@ -43,8 +41,18 @@ public class ImageProcessor
                 {
                     skin[i][j][k]=skin[i][j][k]/skinSum;
                     nonSkin[i][j][k]=nonSkin[i][j][k]/nonSkinSum;
-                    trainedData[i][j][k]=skin[i][j][k]/nonSkin[i][j][k];
-                    System.out.println(trainedData[i][j][k]);
+                    if(skin[i][j][k]==0.0&&nonSkin[i][j][k]==0.0)
+                    {
+                        trainedData[i][j][k]=0;
+                    }
+                    else if (nonSkin[i][j][k]==0.0)
+                    {
+                        trainedData[i][j][k]=100;
+                    }
+                    else
+                    {
+                        trainedData[i][j][k]=skin[i][j][k]/nonSkin[i][j][k];
+                    }
                 }
             }
         }

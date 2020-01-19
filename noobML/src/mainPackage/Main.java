@@ -3,6 +3,7 @@ package mainPackage;
 import package123.FolderToFiles;
 import package123.ImageProcessor;
 import package123.RGB;
+import package123.Result;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,6 +12,10 @@ import java.util.List;
 public class Main
 {
     public static void main(String[] foo) {
+
+        double [] [] [] skin = new double [256] [256] [256];
+        double [] [] [] nonSkin = new double [256] [256] [256];
+
         File[] listOfFiles = FolderToFiles.getListOfFiles("/home/yasinsazid/Desktop/ibtd");
 
         List<File> doneFiles = new ArrayList<>();
@@ -50,12 +55,14 @@ public class Main
             }
 
             RGB rgb = new RGB("/home/yasinsazid/Desktop/ibtd/"+real.getName(),
-                    "/home/yasinsazid/Desktop/ibtd/"+mask.getName());
-
-            ImageProcessor imageProcessor = new ImageProcessor(rgb.getSkin(),rgb.getNonSkin());
+                    "/home/yasinsazid/Desktop/ibtd/"+mask.getName(),skin,nonSkin);
 
             doneFiles.add(real);
             doneFiles.add(mask);
         }
+
+        ImageProcessor imageProcessor = new ImageProcessor(skin,nonSkin);
+
+        Result result = new Result("photos/s.jpg", imageProcessor.getTrainedData());
     }
 }

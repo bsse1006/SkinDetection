@@ -13,8 +13,8 @@ public class RGB extends Component
     private int b;
     private int g;
 
-    private double [] [] [] skin = new double [256] [256] [256];
-    private double [] [] [] nonSkin = new double [256] [256] [256];
+    private double [] [] [] skin;
+    private double [] [] [] nonSkin;
 
     public double[][][] getSkin() {
         return skin;
@@ -57,7 +57,9 @@ public class RGB extends Component
         }
     }
 
-    public RGB(String real, String mask) {
+    public RGB(String real, String mask,double[][][] skin,double[][][] nonSkin) {
+        this.skin=skin;
+        this.nonSkin=nonSkin;
         try {
             // get the BufferedImage, using the ImageIO class
             BufferedImage realImage, maskImage;
