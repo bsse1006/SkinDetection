@@ -66,8 +66,7 @@ public class Main
                     }
                 }
 
-                RGB rgb = new RGB(folderPath+'/'+real.getName(),
-                        folderPath+'/'+mask.getName(),skin,nonSkin);
+                RGB rgb = new RGB(folderPath+"/"+real.getName(), folderPath+"/"+mask.getName(),skin,nonSkin);
 
                 doneFiles.add(real);
                 doneFiles.add(mask);
@@ -88,9 +87,6 @@ public class Main
 
                 out.close();
                 file.close();
-
-                System.out.println("Object has been serialized");
-
             }
             catch(IOException ex)
             {
@@ -111,8 +107,6 @@ public class Main
 
                 in.close();
                 file.close();
-
-                System.out.println("Object has been deserialized ");
             }
 
             catch(IOException ex)
@@ -128,6 +122,7 @@ public class Main
             System.out.println("Enter test image path:");
 
             String testImagePath = cin.nextLine();
+            testImagePath = cin.nextLine();
 
             Result result = new Result(testImagePath, database.getTrainedData());
         }
