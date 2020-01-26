@@ -1,13 +1,11 @@
 package mainPackage;
 
-import package123.FolderToFiles;
-import package123.ImageProcessor;
-import package123.RGB;
-import package123.Result;
+import package123.*;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main
 {
@@ -16,53 +14,124 @@ public class Main
         double [] [] [] skin = new double [256] [256] [256];
         double [] [] [] nonSkin = new double [256] [256] [256];
 
-        File[] listOfFiles = FolderToFiles.getListOfFiles("/home/yasinsazid/Desktop/ibtd");
+        Scanner cin = new Scanner(System.in);
 
-        List<File> doneFiles = new ArrayList<>();
+        System.out.println("1. Train\n2. Test");
 
-        for (File file : listOfFiles)
+        int choice;
+
+        choice = cin.nextInt();
+
+        if(choice==1)
         {
-            if(doneFiles.contains(file))
-                continue;
+            System.out.println("Enter training folder path:");
+            String folderPath = cin.nextLine();
+            folderPath = cin.nextLine();
 
-            File real = null;
-            File mask = null;
-            if (file.isFile()&&file.getName().contains("bmp"))
+            File[] listOfFiles = FolderToFiles.getListOfFiles(folderPath);
+
+            List<File> doneFiles = new ArrayList<>();
+
+            for (File file : listOfFiles)
             {
-                mask = file;
+                if(doneFiles.contains(file))
+                    continue;
 
-                for (File otherFile : listOfFiles)
+                File real = null;
+                File mask = null;
+                if (file.isFile()&&file.getName().contains("bmp"))
                 {
-                    if(otherFile.isFile()&&otherFile.getName().contains("jpg")&&otherFile.getName().contains(
-                            file.getName().substring(0,4)))
+                    mask = file;
+
+                    for (File otherFile : listOfFiles)
                     {
-                        real = otherFile;
+                        if(otherFile.isFile()&&otherFile.getName().contains("jpg")&&otherFile.getName().contains(
+                                file.getName().substring(0,4)))
+                        {
+                            real = otherFile;
+                        }
                     }
                 }
-            }
-            else if (file.isFile()&&file.getName().contains("jpg"))
-            {
-                real = file;
-
-                for (File otherFile : listOfFiles)
+                else if (file.isFile()&&file.getName().contains("jpg"))
                 {
-                    if(otherFile.isFile()&&otherFile.getName().contains("bmp")&&otherFile.getName().contains(
-                            file.getName().substring(0,4)))
+                    real = file;
+
+                    for (File otherFile : listOfFiles)
                     {
-                        mask = otherFile;
+                        if(otherFile.isFile()&&otherFile.getName().contains("bmp")&&otherFile.getName().contains(
+                                file.getName().substring(0,4)))
+                        {
+                            mask = otherFile;
+                        }
                     }
                 }
+
+                RGB rgb = new RGB(folderPath+'/'+real.getName(),
+                        folderPath+'/'+mask.getName(),skin,nonSkin);
+
+                doneFiles.add(real);
+                doneFiles.add(mask);
             }
 
-            RGB rgb = new RGB("/home/yasinsazid/Desktop/ibtd/"+real.getName(),
-                    "/home/yasinsazid/Desktop/ibtd/"+mask.getName(),skin,nonSkin);
+            ImageProcessor imageProcessor = new ImageProcessor(skin,nonSkin);
 
-            doneFiles.add(real);
-            doneFiles.add(mask);
+            Database database = new Database(imageProcessor.getTrainedData());
+
+            try
+            {
+                //Saving of object in a file
+                FileOutputStream file = new FileOutputStream("Database/database.ser");
+                ObjectOutputStream out = new ObjectOutputStream(file);
+
+                // Method for serialization of object
+                out.writeObject(database);
+
+                out.close();
+                file.close();
+
+                System.out.println("Object has been serialized");
+
+            }
+            catch(IOException ex)
+            {
+                System.out.println("IOException is caught");
+            }
+        }
+        else if(choice==2)
+        {
+            Database database = null;
+            try
+            {
+                // Reading the object from a file
+                FileInputStream file = new FileInputStream("Database/database.ser");
+                ObjectInputStream in = new ObjectInputStream(file);
+
+                // Method for deserialization of object
+                database = (Database) in.readObject();
+
+                in.close();
+                file.close();
+
+                System.out.println("Object has been deserialized ");
+            }
+
+            catch(IOException ex)
+            {
+                System.out.println("IOException is caught");
+            }
+
+            catch(ClassNotFoundException ex)
+            {
+                System.out.println("ClassNotFoundException is caught");
+            }
+
+            System.out.println("Enter test image path:");
+
+            String testImagePath = cin.nextLine();
+
+            Result result = new Result(testImagePath, database.getTrainedData());
         }
 
-        ImageProcessor imageProcessor = new ImageProcessor(skin,nonSkin);
-
-        Result result = new Result("photos/s.jpg", imageProcessor.getTrainedData());
+        cin.close();
     }
 }

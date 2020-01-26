@@ -29,7 +29,7 @@ public class Result
             BufferedImage image;
             image = ImageIO.read(new File(testFile));
             marchThroughImage(image);
-            ImageIO.write(image, "jpg", new File("photos/outputFinal.jpg"));
+            ImageIO.write(image, "jpg", new File("photos/output.jpg"));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
