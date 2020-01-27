@@ -9,14 +9,14 @@ import java.io.IOException;
 
 public class Result
 {
-    private String testFile;
+    private File testFile;
     private double [] [] [] trainedData = new double [256] [256] [256];
 
     private int r;
     private int b;
     private int g;
 
-    public Result(String testFile, double[][][] trainedData) {
+    public Result(File testFile, double[][][] trainedData) {
         this.testFile = testFile;
         this.trainedData = trainedData;
         testFileProcessor();
@@ -27,9 +27,9 @@ public class Result
         try {
             // get the BufferedImage, using the ImageIO class
             BufferedImage image;
-            image = ImageIO.read(new File(testFile));
+            image = ImageIO.read(testFile);
             marchThroughImage(image);
-            ImageIO.write(image, "jpg", new File("photos/output.jpg"));
+            ImageIO.write(image, "jpg", new File("Database/output"+testFile.getName()));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -52,7 +52,6 @@ public class Result
     }
 
     public void printPixelARGB(int pixel) {
-        int alpha = (pixel >> 24) & 0xff;
         int red = (pixel >> 16) & 0xff;
         int green = (pixel >> 8) & 0xff;
         int blue = (pixel) & 0xff;

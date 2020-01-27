@@ -119,12 +119,17 @@ public class Main
                 System.out.println("ClassNotFoundException is caught");
             }
 
-            System.out.println("Enter test image path:");
+            System.out.println("Enter test images folder path:");
 
             String testImagePath = cin.nextLine();
             testImagePath = cin.nextLine();
 
-            Result result = new Result(testImagePath, database.getTrainedData());
+            File[] listOfFiles = FolderToFiles.getListOfFiles(testImagePath);
+
+            for (File file : listOfFiles)
+            {
+                Result result = new Result(file, database.getTrainedData());
+            }
         }
 
         cin.close();
